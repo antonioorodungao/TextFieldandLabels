@@ -1,4 +1,4 @@
-package udemy.textfieldlabels;
+package gui;
 
 /**
  * Copyrights 2002-2011 Webb Fontaine

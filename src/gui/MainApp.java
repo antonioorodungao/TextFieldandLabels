@@ -1,4 +1,4 @@
-package udemy.textfieldlabels;
+package gui;
 
 import javax.swing.*;
 
