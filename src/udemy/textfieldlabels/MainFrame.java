@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
     private JButton btn;
     private Toolbar toolbar;
     private FormPanel formPanel;
+    JFileChooser fileChooser;
 
     public MainFrame() {
         super("Udemy");
@@ -28,6 +29,10 @@ public class MainFrame extends JFrame {
         btn = new JButton("Click Me");
         toolbar = new Toolbar();
         formPanel = new FormPanel();
+
+        //
+        fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new PersonFileFilter());
 
         //add(textArea, BorderLayout.CENTER);
         add(toolbar, BorderLayout.NORTH);
@@ -72,6 +77,7 @@ public class MainFrame extends JFrame {
         JMenu fileMenu = new JMenu("File");
         JMenu windowMenu = new JMenu("Window");
 
+
         JMenuItem exportDataItem = new JMenuItem("Export Data...");
         JMenuItem importDataItem = new JMenuItem("Import Data...");
         JMenuItem exitItem = new JMenuItem("Exit");
@@ -115,6 +121,26 @@ public class MainFrame extends JFrame {
                 }
             }
         });
+
+        importDataItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
+                    System.out.println(fileChooser.getSelectedFile());
+
+                }
+            }
+        });
+
+        exportDataItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
+                    System.out.println(fileChooser.getSelectedFile());
+
+                }
+            }
+        });
+
+
 
         return  menuBar;
 
