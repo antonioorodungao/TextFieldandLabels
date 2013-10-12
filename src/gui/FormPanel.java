@@ -88,6 +88,7 @@ public class FormPanel extends JPanel {
         ageModel.addElement(new AgeCategory(2, "65 or over"));
         ageList.setBorder(listBorder);
         ageList.setModel(ageModel);
+        ageList.setSelectedIndex(0);
 
         Border innerBorder = BorderFactory.createTitledBorder("Add Person");
         Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
@@ -113,9 +114,6 @@ public class FormPanel extends JPanel {
                 String taxID = taxField.getText();
                 boolean usCitizen = citizenCheck.isSelected();
                 EmpCategory empCat = (EmpCategory)empCombo.getSelectedItem();
-
-
-
                 String gender = genderGroup.getSelection().getActionCommand();
                 formListener.formEventOccurred(new FormEvent(e,name, occupation, ageCat.getId(), taxID, usCitizen, gender, empCat));
             }

@@ -23,7 +23,8 @@ public class MainFrame extends JFrame {
     private Toolbar toolbar;
     private FormPanel formPanel;
     JFileChooser fileChooser;
-    private Controller controller;
+    private Controller controller; //TODO:
+    private TablePanel table;
 
     public MainFrame() {
         super("Udemy");
@@ -33,6 +34,9 @@ public class MainFrame extends JFrame {
         btn = new JButton("Click Me");
         toolbar = new Toolbar();
         formPanel = new FormPanel();
+        controller = new Controller();
+        table = new TablePanel();
+        table.setData(controller.getPeople());
 
         //
         fileChooser = new JFileChooser();
@@ -40,10 +44,13 @@ public class MainFrame extends JFrame {
 
         //add(textArea, BorderLayout.CENTER);
         add(toolbar, BorderLayout.NORTH);
-        add(textPanel, BorderLayout.CENTER);
+        //add(textPanel, BorderLayout.CENTER);
         add(btn, BorderLayout.SOUTH);
         add(formPanel, BorderLayout.WEST);
         add(createMenuBar(), BorderLayout.NORTH);
+        //Table
+
+        add(table, BorderLayout.CENTER);
 
         toolbar.setStringListener(new StringListener() {
             public void textEmitted(String text) {
@@ -61,15 +68,13 @@ public class MainFrame extends JFrame {
 
         formPanel.setFormListener(new FormListener(){
             public void formEventOccurred(FormEvent e){
-                String name = e.getName();
-                String occupation = e.getOccupation();
-                int ageCat = e.getAgeCat();
-//                EmpCategory empCat = e.get
-                String gender = e.getGender();
-                textPanel.appendText("name: " + name + "occupation: " + occupation + " age category: " + ageCat + " gender: " + gender);
+                controller.addPerson(e);
+                table.refresh();
 
             }
         });
+
+
         setMinimumSize(new Dimension(500,400));
         setSize(600, 400);
         setVisible(true);

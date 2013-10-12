@@ -3,6 +3,8 @@ package controller;
 import gui.FormEvent;
 import model.*;
 
+import java.util.List;
+
 /**
  * Copyrights 2002-2011 Webb Fontaine
  * Developer: Antonio Oro Dungao
@@ -45,6 +47,9 @@ public class Controller {
 
         Person person = new Person(name,occupation, ageCategory,empCat,taxID,isUS, genderCategory);
         db.addPerson(person);
+    }
 
+    public List<Person> getPeople(){
+        return db.getPeople();
     }
 }
