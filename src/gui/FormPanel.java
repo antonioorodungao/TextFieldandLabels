@@ -1,5 +1,7 @@
 package gui;
 
+import model.EmpCategory;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -93,9 +95,11 @@ public class FormPanel extends JPanel {
 
         //set up combo box
         DefaultComboBoxModel empModel = new DefaultComboBoxModel();
-        empModel.addElement("Employed");
-        empModel.addElement("Self-employed");
-        empModel.addElement("Unemployed");
+
+        int empCount = EmpCategory.values().length;
+        for(int i = 0; i < empCount; i++){
+            empModel.addElement(EmpCategory.getEmpCat(i));
+        }
 
         empCombo.setModel(empModel);
 
@@ -108,9 +112,12 @@ public class FormPanel extends JPanel {
                 AgeCategory ageCat = (AgeCategory)ageList.getSelectedValue();
                 String taxID = taxField.getText();
                 boolean usCitizen = citizenCheck.isSelected();
+                EmpCategory empCat = (EmpCategory)empCombo.getSelectedItem();
+
+
 
                 String gender = genderGroup.getSelection().getActionCommand();
-                formListener.formEventOccurred(new FormEvent(e,name, occupation, ageCat.toString(), taxID, usCitizen, gender));
+                formListener.formEventOccurred(new FormEvent(e,name, occupation, ageCat.getId(), taxID, usCitizen, gender, empCat));
             }
         });
     }

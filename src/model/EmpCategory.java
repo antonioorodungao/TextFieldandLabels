@@ -12,4 +12,19 @@ public enum EmpCategory {
     selfEmployed,
     unemployed,
     other;
+
+    public static EmpCategory getEmpCat(int i){
+        switch(i){
+            case 0:
+                return employed;
+            case 1:
+                return selfEmployed;
+            case 2:
+                return unemployed;
+            case 3:
+                return other;
+            default:
+                return null;
+        }
+    }
 }

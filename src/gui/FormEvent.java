@@ -1,5 +1,7 @@
 package gui;
 
+import model.EmpCategory;
+
 import java.util.EventObject;
 
 /**
@@ -21,17 +23,21 @@ public class FormEvent extends EventObject {
 
     private String name;
     private String occupation;
-    private String ageCat;
+    private int ageCat;
     private String taxID;
     private boolean usCitizen;
     private String gender;
+
+
+
+    private EmpCategory empCat;
 
     public FormEvent(Object source) {
         super(source);
     }
 
-    public FormEvent(Object source, String name, String occupation, String agecat, String taxID, boolean  usCitizen,
-            String gender){
+    public FormEvent(Object source, String name, String occupation, int agecat, String taxID, boolean  usCitizen,
+            String gender, EmpCategory empCat){
         super(source);
         this.name = name;
         this.occupation = occupation;
@@ -39,6 +45,7 @@ public class FormEvent extends EventObject {
         this.taxID = taxID;
         this.usCitizen = usCitizen;
         this.gender = gender;
+        this.empCat = empCat;
     }
 
     public String getName() {
@@ -57,11 +64,11 @@ public class FormEvent extends EventObject {
         this.occupation = occupation;
     }
 
-    public String getAgeCat() {
+    public int getAgeCat() {
         return ageCat;
     }
 
-    public void setAgeCat(String ageCat) {
+    public void setAgeCat(int ageCat) {
         this.ageCat = ageCat;
     }
 
@@ -87,5 +94,13 @@ public class FormEvent extends EventObject {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public EmpCategory getEmpCat() {
+        return empCat;
+    }
+
+    public void setEmpCat(EmpCategory empCat) {
+        this.empCat = empCat;
     }
 }

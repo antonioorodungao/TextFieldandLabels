@@ -10,4 +10,14 @@ package model;
 public enum GenderCategory {
     male,
     female;
+
+    public static GenderCategory getGenderCategory(int i){
+        switch (i){
+            case 0:
+                return male;
+            case 1:
+                return female;
+        }
+        return  null;
+    }
 }

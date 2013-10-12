@@ -1,5 +1,8 @@
 package gui;
 
+import controller.Controller;
+import model.EmpCategory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,6 +23,7 @@ public class MainFrame extends JFrame {
     private Toolbar toolbar;
     private FormPanel formPanel;
     JFileChooser fileChooser;
+    private Controller controller;
 
     public MainFrame() {
         super("Udemy");
@@ -59,7 +63,8 @@ public class MainFrame extends JFrame {
             public void formEventOccurred(FormEvent e){
                 String name = e.getName();
                 String occupation = e.getOccupation();
-                String ageCat = e.getAgeCat();
+                int ageCat = e.getAgeCat();
+//                EmpCategory empCat = e.get
                 String gender = e.getGender();
                 textPanel.appendText("name: " + name + "occupation: " + occupation + " age category: " + ageCat + " gender: " + gender);
 
