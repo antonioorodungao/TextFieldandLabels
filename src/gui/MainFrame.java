@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 /**
  * Copyrights 2002-2011 Webb Fontaine
@@ -135,7 +136,14 @@ public class MainFrame extends JFrame {
         importDataItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
-                    System.out.println(fileChooser.getSelectedFile());
+                    try {
+                        System.out.println(fileChooser.getSelectedFile());
+                        controller.loadFromFile(fileChooser.getSelectedFile());
+                        table.refresh();
+                    } catch (IOException e1) {
+                        JOptionPane.showMessageDialog(MainFrame.this, "Could not load from file ", "Error", JOptionPane.ERROR_MESSAGE);
+                        e1.printStackTrace();
+                    };
 
                 }
             }
@@ -145,6 +153,13 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
                     System.out.println(fileChooser.getSelectedFile());
+                    try {
+                        controller.saveToFile(fileChooser.getSelectedFile());
+                        table.refresh();
+                    } catch (IOException e1) {
+                        JOptionPane.showMessageDialog(MainFrame.this, "Could not save to file ", "Error", JOptionPane.ERROR_MESSAGE);
+                        e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
 
                 }
             }
