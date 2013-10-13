@@ -1,7 +1,6 @@
 package gui;
 
 import controller.Controller;
-import model.EmpCategory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +24,7 @@ public class MainFrame extends JFrame {
     private FormPanel formPanel;
     JFileChooser fileChooser;
     private Controller controller; //TODO:
-    private TablePanel table;
+    private TablePanel tablePanel;
 
     public MainFrame() {
         super("Udemy");
@@ -36,8 +35,15 @@ public class MainFrame extends JFrame {
         toolbar = new Toolbar();
         formPanel = new FormPanel();
         controller = new Controller();
-        table = new TablePanel();
-        table.setData(controller.getPeople());
+        tablePanel = new TablePanel();
+        tablePanel.setData(controller.getPeople());
+
+        tablePanel.setPersonTableListener(new PersonTableListener() {
+            public void rowDeleted(int row) {
+                controller.removePerson(row);
+                tablePanel.refresh();
+            }
+        });
 
         //
         fileChooser = new JFileChooser();
@@ -51,7 +57,7 @@ public class MainFrame extends JFrame {
         add(createMenuBar(), BorderLayout.NORTH);
         //Table
 
-        add(table, BorderLayout.CENTER);
+        add(tablePanel, BorderLayout.CENTER);
 
         toolbar.setStringListener(new StringListener() {
             public void textEmitted(String text) {
@@ -70,7 +76,7 @@ public class MainFrame extends JFrame {
         formPanel.setFormListener(new FormListener(){
             public void formEventOccurred(FormEvent e){
                 controller.addPerson(e);
-                table.refresh();
+                tablePanel.refresh();
 
             }
         });
@@ -121,6 +127,7 @@ public class MainFrame extends JFrame {
         fileMenu.setMnemonic(KeyEvent.VK_F);
         exitItem.setMnemonic(KeyEvent.VK_X);
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+        importDataItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
 
         exitItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -139,7 +146,7 @@ public class MainFrame extends JFrame {
                     try {
                         System.out.println(fileChooser.getSelectedFile());
                         controller.loadFromFile(fileChooser.getSelectedFile());
-                        table.refresh();
+                        tablePanel.refresh();
                     } catch (IOException e1) {
                         JOptionPane.showMessageDialog(MainFrame.this, "Could not load from file ", "Error", JOptionPane.ERROR_MESSAGE);
                         e1.printStackTrace();
@@ -155,7 +162,7 @@ public class MainFrame extends JFrame {
                     System.out.println(fileChooser.getSelectedFile());
                     try {
                         controller.saveToFile(fileChooser.getSelectedFile());
-                        table.refresh();
+                        tablePanel.refresh();
                     } catch (IOException e1) {
                         JOptionPane.showMessageDialog(MainFrame.this, "Could not save to file ", "Error", JOptionPane.ERROR_MESSAGE);
                         e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

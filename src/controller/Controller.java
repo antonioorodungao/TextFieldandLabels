@@ -17,6 +17,11 @@ import java.util.List;
 public class Controller {
     Database db = new Database();
 
+    public void removePerson(int index){
+        db.removePerson(index);
+
+    }
+
     public void addPerson(FormEvent ev){
         String name = ev.getName();
         String occupation = ev.getOccupation();
