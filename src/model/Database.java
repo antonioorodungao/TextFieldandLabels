@@ -1,6 +1,9 @@
 package model;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -12,9 +15,34 @@ import java.util.*;
  */
 public class Database {
     private LinkedList<Person> people;
+    private Connection conn = null;
 
     public Database(){
         people = new LinkedList<Person>();
+    }
+
+    public void connect() throws SQLException {
+
+        if(conn != null)
+            return;
+
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", "twm3_mod");
+        connectionProps.put("password", "twm123");
+
+        //Check if the driver exists
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String connectUrl = "jdbc:oracle:thin:@//localhost:1521/XE";
+        conn = DriverManager.getConnection(connectUrl, connectionProps);
+    }
+
+    public void disconnect(){
+
     }
 
     public void addPerson(Person person){
