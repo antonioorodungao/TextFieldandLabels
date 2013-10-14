@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 /**
  * Copyrights 2002-2011 Webb Fontaine
@@ -25,6 +26,9 @@ public class MainFrame extends JFrame {
     JFileChooser fileChooser;
     private Controller controller; //TODO:
     private TablePanel tablePanel;
+    private PrefsDialog prefsDialog;
+    private Preferences prefs;
+
 
     public MainFrame() {
         super("Udemy");
@@ -37,6 +41,9 @@ public class MainFrame extends JFrame {
         controller = new Controller();
         tablePanel = new TablePanel();
         tablePanel.setData(controller.getPeople());
+        prefsDialog = new PrefsDialog(this);
+
+        prefs = Preferences.userRoot().node("db");
 
         tablePanel.setPersonTableListener(new PersonTableListener() {
             public void rowDeleted(int row) {
@@ -73,6 +80,16 @@ public class MainFrame extends JFrame {
             }
         });
 
+        prefsDialog.setPreferenceListener(new PrefsListener() {
+            public void preferencesSet(String user, String password, int port) {
+                System.out.println(user + " " + password + " " + port);
+                prefs.put("username", user);
+                prefs.put("password", password);
+                prefs.put("port", new Integer(port).toString());
+
+            }
+        });
+
         formPanel.setFormListener(new FormListener(){
             public void formEventOccurred(FormEvent e){
                 controller.addPerson(e);
@@ -80,6 +97,11 @@ public class MainFrame extends JFrame {
 
             }
         });
+
+        String user = prefs.get("user", "");
+        String passwd = prefs.get("password", "");
+        String port = prefs.get("port", "3306");
+        prefsDialog.setDefaults(user, passwd, port);
 
 
         setMinimumSize(new Dimension(500,400));
@@ -89,10 +111,13 @@ public class MainFrame extends JFrame {
 
     }
 
+
+
     private JMenuBar createMenuBar(){
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenu windowMenu = new JMenu("Window");
+        JMenuItem prefsItem = new JMenuItem("Preferences...");
 
 
         JMenuItem exportDataItem = new JMenuItem("Export Data...");
@@ -112,9 +137,16 @@ public class MainFrame extends JFrame {
         showMenu.add(showFormItem);
 
         windowMenu.add(showMenu);
+        windowMenu.add(prefsItem);
 
         menuBar.add(fileMenu);
         menuBar.add(windowMenu);
+
+        prefsItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                prefsDialog.setVisible(true);
+            }
+        });
 
         showFormItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -128,6 +160,9 @@ public class MainFrame extends JFrame {
         exitItem.setMnemonic(KeyEvent.VK_X);
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
         importDataItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
+        prefsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,  ActionEvent.CTRL_MASK));
+
+        //End of Setup Mnemonic
 
         exitItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
