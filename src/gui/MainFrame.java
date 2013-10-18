@@ -28,6 +28,7 @@ public class MainFrame extends JFrame {
     private TablePanel tablePanel;
     private PrefsDialog prefsDialog;
     private Preferences prefs;
+    private JSplitPane splitPane;
 
 
     public MainFrame() {
@@ -42,6 +43,9 @@ public class MainFrame extends JFrame {
         tablePanel = new TablePanel();
         tablePanel.setData(controller.getPeople());
         prefsDialog = new PrefsDialog(this);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel, tablePanel);
+        splitPane.setOneTouchExpandable(true);
+
 
         prefs = Preferences.userRoot().node("db");
 
@@ -60,13 +64,13 @@ public class MainFrame extends JFrame {
         setJMenuBar(createMenuBar());
         add(toolbar, BorderLayout.PAGE_START);
 
-        //add(textPanel, BorderLayout.CENTER);
+        add(splitPane, BorderLayout.CENTER);
         add(btn, BorderLayout.SOUTH);
-        add(formPanel, BorderLayout.WEST);
+        //add(formPanel, BorderLayout.WEST);
 
         //Table
 
-        add(tablePanel, BorderLayout.CENTER);
+        //add(tablePanel, BorderLayout.CENTER);
 
 
         //Listeners////////////////
@@ -76,7 +80,7 @@ public class MainFrame extends JFrame {
             public void windowClosing(WindowEvent e) {
                 System.out.println("Window closing");
                 dispose();
-                System.gc();
+                //System.gc();
             }
         });
 
@@ -194,7 +198,13 @@ public class MainFrame extends JFrame {
         showFormItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem)e.getSource();
-                formPanel.setVisible(menuItem.isSelected());
+                //formPanel.setVisible(menuItem.isSelected());
+                if(menuItem.isSelected()){
+                    splitPane.setDividerLocation((int)formPanel.getMinimumSize().getWidth() );
+                }else{
+                    splitPane.setDividerLocation(0);
+                }
+
             }
         });
 
