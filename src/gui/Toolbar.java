@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 /**
  * Copyrights 2002-2011 Webb Fontaine
@@ -12,35 +13,50 @@ import java.awt.event.ActionListener;
  * This software is the proprietary information of Webb Fontaine.
  * Its use is subject to License terms.
  */
-public class Toolbar extends JPanel implements ActionListener {
-    private JButton helloButton;
-    private JButton goodbyeButton;
-    private StringListener stringListener;
+public class Toolbar extends JToolBar implements ActionListener {
+    private JButton saveButton;
+    private JButton refreshButton;
+    private ToolbarListener toolbarListener;
 
     public Toolbar(){
-        helloButton = new JButton("Hello");
-        goodbyeButton = new JButton("Goodbye");
-        setLayout(new FlowLayout(FlowLayout.LEFT));
-        helloButton.addActionListener(this);
-        goodbyeButton.addActionListener(this);
-        add(helloButton);
-        add(goodbyeButton);
+        setBorder(BorderFactory.createEtchedBorder());
+        setFloatable(true);
+        saveButton = new JButton();
+        saveButton.setIcon(createIcon("images/safe.gif"));
+        saveButton.setToolTipText("Save");
+        refreshButton = new JButton();
+        refreshButton.setIcon(createIcon("images/refresh.gif"));
+        refreshButton.setToolTipText("Refresh");
+
+        saveButton.addActionListener(this);
+        refreshButton.addActionListener(this);
+        add(saveButton);
+        add(refreshButton);
     }
 
     public void actionPerformed(ActionEvent e) {
-        System.out.println("A button has been clicked");
         JButton clicked = (JButton)e.getSource();
 
-        if(clicked == helloButton){
-            stringListener.textEmitted("Hello button is pressed\n");
-        }else if(clicked == goodbyeButton){
-            stringListener.textEmitted("Goodbye button is pressed\n");
+        if(clicked == saveButton){
+            toolbarListener.saveEventOccured();
+        }else if(clicked == refreshButton){
+            toolbarListener.refreshEventOccured();
         }
 
     }
 
-    public void setStringListener(StringListener sl){
-        this.stringListener = sl;
+    public void setToolbarListener(ToolbarListener sl){
+        this.toolbarListener = sl;
+    }
+
+    private ImageIcon createIcon(String path){
+        URL url = getClass().getResource(path);
+        if(url == null ){
+            System.err.println("Unable to load image" + path);
+        }
+        ImageIcon icon = new ImageIcon(url);
+        return icon;
+
     }
 
 

@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public class Person implements Serializable {
 
-    private static int count = 0;
+    private static int count = 1;
 
     private int id;
     private String name;
@@ -32,6 +32,14 @@ public class Person implements Serializable {
         this.usCitizen = usCitizen;
         this.gender = gender;
         this.id = count;
+        count++;
+    }
+
+    public Person(int ID, String name, String occupation, AgeCategory ageCat,
+                  EmpCategory empcat, String taxID, boolean usCitizen, GenderCategory gender){
+
+        this(name, occupation, ageCat, empcat, taxID, usCitizen, gender);
+        this.id = ID;
         count++;
     }
 
@@ -97,5 +105,9 @@ public class Person implements Serializable {
 
     public void setGender(GenderCategory gender) {
         this.gender = gender;
+    }
+
+    public String toString(){
+        return "ID: " + id + "Name: " + name;
     }
 }

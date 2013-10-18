@@ -2,12 +2,12 @@ package gui;
 
 import controller.Controller;
 
+import javax.sound.sampled.AudioSystem;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.prefs.Preferences;
 
 /**
@@ -57,18 +57,51 @@ public class MainFrame extends JFrame {
         fileChooser.setFileFilter(new PersonFileFilter());
 
         //add(textArea, BorderLayout.CENTER);
-        add(toolbar, BorderLayout.NORTH);
+        setJMenuBar(createMenuBar());
+        add(toolbar, BorderLayout.PAGE_START);
+
         //add(textPanel, BorderLayout.CENTER);
         add(btn, BorderLayout.SOUTH);
         add(formPanel, BorderLayout.WEST);
-        add(createMenuBar(), BorderLayout.NORTH);
+
         //Table
 
         add(tablePanel, BorderLayout.CENTER);
 
-        toolbar.setStringListener(new StringListener() {
-            public void textEmitted(String text) {
-                textPanel.appendText(text);
+
+        //Listeners////////////////
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.out.println("Window closing");
+                dispose();
+                System.gc();
+            }
+        });
+
+        toolbar.setToolbarListener(new ToolbarListener() {
+            public void saveEventOccured() {
+                System.out.println("Save");
+                connect();
+                try {
+                    controller.save();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Unable to save to database", "Database Connection Failed", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+
+            public void refreshEventOccured(){
+                System.out.println("Refresh");
+                connect();
+                try {
+                    controller.load();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(MainFrame.this, "Unable to load from database", "Database Connection Failed", JOptionPane.ERROR_MESSAGE);
+                }
+                tablePanel.refresh();
 
             }
         });
@@ -111,10 +144,20 @@ public class MainFrame extends JFrame {
 
     }
 
+    private void connect(){
+        try {
+            controller.connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(MainFrame.this, "Cannot connect to database", "Database Connection Problem", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
 
     private JMenuBar createMenuBar(){
         JMenuBar menuBar = new JMenuBar();
+
         JMenu fileMenu = new JMenu("File");
         JMenu windowMenu = new JMenu("Window");
         JMenuItem prefsItem = new JMenuItem("Preferences...");
@@ -170,7 +213,10 @@ public class MainFrame extends JFrame {
                 int action = JOptionPane.showConfirmDialog(MainFrame.this, "Do you really want to exit the application? " + name, "Confirm Exit", JOptionPane.OK_CANCEL_OPTION | JOptionPane.WARNING_MESSAGE);
 
                 if(action == JOptionPane.OK_OPTION){
-                    System.exit(0);
+                    WindowListener[] wl = getWindowListeners();
+                    for(WindowListener listener: wl){
+                        listener.windowClosing(new WindowEvent(MainFrame.this, 0));
+                    }
                 }
             }
         });

@@ -7,6 +7,8 @@ package gui;
  * This software is the proprietary information of Webb Fontaine.
  * Its use is subject to License terms.
  */
-public interface StringListener {
-    public  void textEmitted(String text);
+public interface ToolbarListener {
+    public  void saveEventOccured();
+    public  void refreshEventOccured();
+
 }

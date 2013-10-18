@@ -14,6 +14,16 @@ public class TestDatabase {
         final Database db = new Database();
         try {
             db.connect();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        db.addPerson(new Person("OroUpdated", "Robot", AgeCategory.adult, EmpCategory.employed, "1234545", true, GenderCategory.male));
+        db.addPerson(new Person("Oro1", "Robot", AgeCategory.adult, EmpCategory.employed, "1234545", true, GenderCategory.male));
+
+        try {
+            db.save();
         } catch (SQLException e) {
             e.printStackTrace();
         }
