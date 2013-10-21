@@ -1,5 +1,8 @@
 package gui;
 
+import javax.swing.*;
+import java.net.URL;
+
 /**
  * Copyrights 2002-2011 Webb Fontaine
  * Developer: Antonio Oro Dungao
@@ -15,5 +18,15 @@ public class Util {
             return  null;
         }
         return filename.substring(index, filename.length());
+    }
+
+    public static ImageIcon createIcon(String path){
+        URL url = System.class.getResource(path);
+        if(url == null ){
+            System.err.println("Unable to load image" + path);
+        }
+        ImageIcon icon = new ImageIcon(url);
+        return icon;
+
     }
 }
