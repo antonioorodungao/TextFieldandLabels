@@ -47,36 +47,35 @@ public class MessagePanel extends JPanel {
 
     private JTree serverTree;
     private ServerTreeCellRenderer treeCellRenderer;
+    private ServerTreeCellEditor serverTreeCellEditor;
 
     public MessagePanel(){
 
         serverTree = new JTree(createTree());
         treeCellRenderer = new ServerTreeCellRenderer();
-
-
+        serverTreeCellEditor = new ServerTreeCellEditor();
+        serverTree.setEditable(true);
 
         serverTree.setCellRenderer(treeCellRenderer);
+        serverTree.setCellEditor(serverTreeCellEditor);
         serverTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        serverTree.addTreeSelectionListener(new TreeSelectionListener() {
-            public void valueChanged(TreeSelectionEvent e) {
-                DefaultMutableTreeNode dmt = (DefaultMutableTreeNode)serverTree.getLastSelectedPathComponent();
-                Object userObject = dmt.getUserObject();
 
-                System.out.println(userObject);
-
-            }
-        });
+        //Will tell you if the node is selected or not
+        //removing since we are not concerned anymore with selection.
+//        serverTree.addTreeSelectionListener(new TreeSelectionListener() {
+//            public void valueChanged(TreeSelectionEvent e) {
+//                DefaultMutableTreeNode dmt = (DefaultMutableTreeNode)serverTree.getLastSelectedPathComponent();
+//                Object userObject = dmt.getUserObject();
+//                System.out.println(userObject);
+//            }
+//        });
         setLayout(new BorderLayout());
-
         add(new JScrollPane(serverTree), BorderLayout.CENTER);
 
     }
 
     private DefaultMutableTreeNode createTree(){
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("Servers");
-
-
-
         DefaultMutableTreeNode branch1 = new DefaultMutableTreeNode("USA");
         DefaultMutableTreeNode server1 = new DefaultMutableTreeNode(new ServerInfo("New York", 0, true));
         DefaultMutableTreeNode server2 = new DefaultMutableTreeNode(new ServerInfo("Boston", 1, false));
